@@ -1,26 +1,521 @@
-@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap');
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ══════════════════════════════════════════
+   الثيم الداكن — افتراضي
+══════════════════════════════════════════ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* ✅ مضاف — كان مفقوداً */
+  color-scheme: dark;
+
+  /* ── الألوان ──────────────────────────── */
+  --color-primary:        #B3334B;
+  --color-primary-hover:  #962B3F;
+  --color-primary-soft:   rgba(179,51,75,0.20);
+  --color-primary-xsoft:  rgba(179,51,75,0.10);
+  --color-secondary:      #ffffff;
+  --color-gold:           linear-gradient(to right, #7a5c00 0%, #c9a227 35%, #ffd700 55%, #fff4b0 65%, #d4af37 85%, #6b5100 100%);
+  --color-gold-hover:     #C49B2E;
+  --color-accent:         #A4161A;
+
+  --bg-main:     #080008;
+  --bg-surface:  #121212;
+  --bg-soft:     #1C1C24;
+  --bg-elevated: #22222C;
+
+  --text-main:       #FFFFFF;
+  --text-secondary:  #C1C1C1;
+  --text-tertiary:   #AAAAAA;
+  --text-on-primary: #FFFFFF;
+
+  --border-soft:   rgba(179,51,75,0.4);
+  --border-medium: rgba(179,51,75,0.7);
+  --border-gold:   rgba(212,175,55,0.4);
+
+  --glass-bg:     rgba(255,255,255,0.05);
+  --glass-border: rgba(255,255,255,0.11);
+  --glass-blur:   blur(12px);
+
+  --shadow-soft:      0 8px 32px rgba(0,0,0,0.55);
+  --shadow-deep:      0 24px 64px rgba(0,0,0,0.70);
+  --shadow-red-glow:  rgba(179,51,75,0.25);
+  --shadow-gold-glow: rgba(212,175,55,0.50);
+
+  --input-line:        rgba(255,255,255,0.35);
+  --input-line-focus:  #A4161A;
+  --input-placeholder: rgba(255,255,255,0.50);
+
+  /* ══════════════════════════════════════════
+     مقياس المستخدم — يُضبط عبر JS (useSystemScale)
+     القيمة الافتراضية 1 = بدون تغيير
+  ══════════════════════════════════════════ */
+  --user-scale: 1;
+
+  /* ══════════════════════════════════════════
+     نظام الأحجام العالمي — rem × --user-scale
+  ══════════════════════════════════════════ */
+
+  /* ── أحجام النص ──────────────────────── */
+  --text-2xs:  calc(clamp(0.625rem,  0.6875rem, 0.75rem)   * var(--user-scale));
+  --text-xs:   calc(clamp(0.6875rem, 0.75rem,   0.875rem)  * var(--user-scale));
+  --text-sm:   calc(clamp(0.75rem,   0.8125rem, 0.9375rem) * var(--user-scale));
+  --text-base: calc(clamp(0.875rem,  1rem,      1.125rem)  * var(--user-scale));
+  --text-md:   calc(clamp(0.9375rem, 1.0625rem, 1.1875rem) * var(--user-scale));
+  --text-lg:   calc(clamp(1rem,      1.125rem,  1.3125rem) * var(--user-scale));
+  --text-xl:   calc(clamp(1.125rem,  1.3125rem, 1.5rem)    * var(--user-scale));
+  --text-2xl:  calc(clamp(1.25rem,   1.5rem,    1.875rem)  * var(--user-scale));
+  --text-3xl:  calc(clamp(1.5rem,    1.875rem,  2.25rem)   * var(--user-scale));
+
+  /* ── المسافات — نظام 4px ──────────────── */
+  --sp-1:  0.25rem;
+  --sp-2:  0.5rem;
+  --sp-3:  0.75rem;
+  --sp-4:  1rem;
+  --sp-5:  1.25rem;
+  --sp-6:  1.5rem;
+  --sp-8:  2rem;
+  --sp-10: 2.5rem;
+  --sp-12: 3rem;
+  --sp-16: 4rem;
+
+  /* ── مكونات ──────────────────────────── */
+  --nav-h:    3.875rem;
+  --header-h: 3.5rem;
+  --btn-h:    2.75rem;
+  --btn-h-lg: 3.25rem;
+
+  /* ── أيقونات — تتكيف مع --user-scale ─── */
+  --icon-sm: calc(1rem    * var(--user-scale));
+  --icon-md: calc(1.25rem * var(--user-scale));
+  --icon-lg: calc(1.5rem  * var(--user-scale));
+  --icon-xl: calc(2rem    * var(--user-scale));
+
+  /* ── الأفاتار — تتكيف مع --user-scale ── */
+  --avatar-xs: calc(1.75rem * var(--user-scale));
+  --avatar-sm: calc(2.5rem  * var(--user-scale));
+  --avatar-md: calc(3.25rem * var(--user-scale));
+  --avatar-lg: calc(4rem    * var(--user-scale));
+  --avatar-xl: calc(6rem    * var(--user-scale));
+
+  /* ── نصف الأقطار ─────────────────────── */
+  --radius-xs:   0.75rem;
+  --radius-sm:   1.0rem;
+  --radius-md:   1.5rem;
+  --radius-lg:   2rem;
+  --radius-xl:   3rem;
+  --radius-2xl:  4rem;
+  --radius-full: 9999px;
+
+  /* ── التباعد بين الأسطر ──────────────── */
+  --lh-tight:   1.25;
+  --lh-snug:    1.375;
+  --lh-normal:  1.5;
+  --lh-relaxed: 1.625;
+
+  /* ── متغير legacy (احتياطي) ─────────── */
+  --base-font-size: 1rem;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* ══════════════════════════════════════════
+   الثيم النهاري
+══════════════════════════════════════════ */
+html.light {
+  color-scheme: light;
+
+  --color-primary:        #B3334B;
+  --color-primary-hover:  #962B3F;
+  --color-primary-soft:   rgba(179,51,75,0.25);
+  --color-primary-xsoft:  rgba(179,51,75,0.40);
+  --color-secondary:      #B3334B;
+  --color-gold:           linear-gradient(to right, #7a5c00 0%, #c9a227 35%, #ffd700 55%, #fff4b0 65%, #d4af37 85%, #6b5100 100%);
+  --color-gold-hover:     #A07830;
+  --color-accent:         #962B3F;
+
+  --bg-main:     #FFFFFF;
+  --bg-surface:  #FFFFFF;
+  --bg-soft:     #F5F5F5;
+  --bg-elevated: #F0F0F0;
+
+  --text-main:       #000000;
+  --text-secondary:  #101010;
+  --text-tertiary:   #3D3D3D;
+  --text-on-primary: #FFFFFF;
+
+  --border-soft:   rgba(179,51,75,0.50);
+  --border-medium: rgba(179,51,75,0.35);
+  --border-gold:   rgba(184,150,62,0.4);
+
+  --glass-bg:     rgba(255,255,255,0.4);
+  --glass-border: rgba(0,0,0,0.2);
+  --glass-blur:   blur(12px);
+
+  --shadow-soft:      0 4px 20px rgba(0,0,0,0.08);
+  --shadow-deep:      0 16px 48px rgba(0,0,0,0.14);
+  --shadow-red-glow:  rgba(139,30,63,0.18);
+  --shadow-gold-glow: rgba(184,150,62,0.22);
+
+  --input-line:        rgba(0,0,0,0.35);
+  --input-line-focus:  #8B1E3F;
+  --input-placeholder: rgba(0,0,0,0.25);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* ══════════════════════════════════════════
+   القاعدة
+══════════════════════════════════════════ */
+@layer base {
+  * {
+    font-family: var(--font-cairo), 'Cairo', sans-serif;
+    box-sizing: border-box;
+    min-width: 0;
+  }
+
+  /* أيقونات Lucide افتراضياً مفرغة — بدون !important حتى يتغلب inline style */
+  svg {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2px;
+  }
+
+
+
+  /* ── استثناء لأيقونات Lucide داخل .icon-wrap ── */
+  .icon-wrap svg {
+    fill: revert-layer !important;
+    stroke: revert-layer !important;
+    stroke-width: revert-layer !important;
+  }
+
+  /* ── استثناء لـ polygon/path داخل .icon-fill ── */
+  .icon-fill polygon,
+  .icon-fill path,
+  .icon-fill circle,
+  .icon-fill rect,
+  .icon-fill line,
+  .icon-fill polyline {
+    fill: inherit !important;
+    stroke: inherit !important;
+    stroke-width: inherit !important;
+  }
+
+  html {
+    font-size: 100%;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    /* ✅ يغطي كامل الشاشة بما فيها منطقة الـ safe area */
+    min-height: 100%;
+    background-color: var(--bg-main);
+  }
+
+  body {
+    @apply antialiased;
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    direction: rtl;
+    line-height: var(--lh-normal);
+    margin: 0;
+    -webkit-tap-highlight-color: transparent;
+    overflow-x: hidden;
+    /* ✅ يمتد لكامل ارتفاع الشاشة — يمنع الشريط الأبيض السفلي */
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+
+  h1 { font-size: var(--text-3xl); line-height: var(--lh-tight);   font-weight: 900; margin: 0; }
+  h2 { font-size: var(--text-2xl); line-height: var(--lh-tight);   font-weight: 800; margin: 0; }
+  h3 { font-size: var(--text-xl);  line-height: var(--lh-snug);    font-weight: 700; margin: 0; }
+  h4 { font-size: var(--text-lg);  line-height: var(--lh-snug);    font-weight: 700; margin: 0; }
+  p  { font-size: var(--text-base);line-height: var(--lh-relaxed); margin: 0; }
+
+  input, textarea, select, button {
+    font-family: inherit;
+    font-size: inherit;
+  }
+
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    opacity: 0.5;
+    filter: invert(1);
+  }
+  html.light input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: none;
   }
 }
 
+/* ══════════════════════════════════════════
+   المكوّنات
+══════════════════════════════════════════ */
+
+  @layer components {
+
+    .text-gold-luxury {
+    -webkit-text-stroke: 0.3px #d4af37;
+    text-shadow: 
+      0 0 15px var(--shadow-gold-glow),
+      inset 0 1px 2px rgba(255, 255, 255, 0.4);
+  }
+
+  .glass-panel {
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-soft);
+    transition: all 0.3s ease;
+  }
+
+  .btn-premium {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  padding: 0 var(--sp-6);
+  height: 2.4rem;
+  border-radius: 1.75rem;
+  font-size: var(--text-sm);
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.15s ease;
+  
+  background: var(--color-primary);
+  color: white;
+  box-shadow: 0 px 1px rgb(129,01,25,0.7);
+  top: 0;
+}
+
+.btn-premium:hover {
+  filter: brightness(1.1);
+}
+
+.btn-premium:active {
+  top: 3px;
+  box-shadow: 0 1px 0px #852638;
+}
+  .btn-premium:active { transform: scale(0.98); }
+
+  :root:not(html.light) .btn-premium::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 50%; height: 100%;
+    background: linear-gradient(to right, transparent, rgba(255,255,255,0.25), transparent);
+    transform: skewX(-25deg);
+    transition: left 0.7s;
+  }
+  :root:not(html.light) .btn-premium:hover::after { left: 150%; }
+
+  .bg-luxury-gradient {
+    background: radial-gradient(ellipse at 100% 0%,
+      rgba(179,51,75,0.5) 0%, var(--bg-main) 90%);
+    min-height: 100dvh;
+    width: 100%;
+  }
+  html.light .bg-luxury-gradient {
+    background: radial-gradient(ellipse at 50% 0%,
+      rgba(179,51,75,0.7) 50%, var(--bg-main) 100%);
+  }
+
+  .snap-container {
+    scroll-snap-type: y mandatory;
+    overflow-y: scroll;
+    height: 100dvh;
+    @apply no-scrollbar;
+  }
+  .snap-section {
+    scroll-snap-align: start;
+    height: 100dvh;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .lux-input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1.5px solid var(--input-line);
+    padding: var(--sp-3) 0;
+    font-size: var(--text-base);
+    font-weight: 500;
+    line-height: var(--lh-normal);
+    color: var(--text-main);
+    caret-color: var(--color-primary);
+    outline: none;
+    transition: border-color 0.2s;
+    -webkit-tap-highlight-color: transparent;
+    font-family: inherit;
+  }
+  .lux-input:focus { border-bottom-color: var(--input-line-focus); }
+  .lux-input::placeholder { color: var(--input-placeholder); font-weight: 400; }
+}
+
+/* ══════════════════════════════════════════
+   الأدوات
+══════════════════════════════════════════ */
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+  .text-2xs  { font-size: var(--text-2xs);  }
+  .text-xs   { font-size: var(--text-xs);   }
+  .text-sm   { font-size: var(--text-sm);   }
+  .text-base { font-size: var(--text-base); }
+  .text-md   { font-size: var(--text-md);   }
+  .text-lg   { font-size: var(--text-lg);   }
+  .text-xl   { font-size: var(--text-xl);   }
+  .text-2xl  { font-size: var(--text-2xl);  }
+  .text-3xl  { font-size: var(--text-3xl);  }
+
+  .avatar-xs { width:var(--avatar-xs); height:var(--avatar-xs); border-radius:50%; object-fit:cover; flex-shrink:0; }
+  .avatar-sm { width:var(--avatar-sm); height:var(--avatar-sm); border-radius:50%; object-fit:cover; flex-shrink:0; }
+  .avatar-md { width:var(--avatar-md); height:var(--avatar-md); border-radius:50%; object-fit:cover; flex-shrink:0; }
+  .avatar-lg { width:var(--avatar-lg); height:var(--avatar-lg); border-radius:50%; object-fit:cover; flex-shrink:0; }
+  .avatar-xl { width:var(--avatar-xl); height:var(--avatar-xl); border-radius:50%; object-fit:cover; flex-shrink:0; }
+
+  .icon-sm { width:var(--icon-sm); height:var(--icon-sm); flex-shrink:0; }
+  .icon-md { width:var(--icon-md); height:var(--icon-md); flex-shrink:0; }
+  .icon-lg { width:var(--icon-lg); height:var(--icon-lg); flex-shrink:0; }
+  .icon-xl { width:var(--icon-xl); height:var(--icon-xl); flex-shrink:0; }
+
+  .animate-float { animation: subtle-float 4s ease-in-out infinite; }
+  @keyframes subtle-float {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-0.5rem); }
+  }
+
+  .animate-slow-shine { animation: slow-shine 8s cubic-bezier(0.4,0,0.2,1) infinite; }
+  @keyframes slow-shine {
+    0%   { transform: translateX(-150%) rotate(25deg); }
+    25%  { transform: translateX(150%)  rotate(25deg); }
+    100% { transform: translateX(150%)  rotate(25deg); }
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  body.modal-open [data-top-bar],
+  body.modal-open [data-bottom-nav] {
+    display: none !important;
+  }
+}
+
+/* ═══════════════════════════════
+   REALISTIC METAL BADGES
+═══════════════════════════════ */
+.badge-metal {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.15em 0.65em;
+  margin-inline-start: 0.35em;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border-radius: 0.45em;
+  overflow: hidden;
+  box-shadow:
+    inset 0 0.05em 0.08em rgba(255,255,255,0.7),
+    inset 0 -0.12em 0.25em rgba(0,0,0,0.7),
+    inset 0 0 0 0.06em rgba(255,255,255,0.25),
+    0 0.08em 0.25em rgba(0,0,0,0.45);
+}
+
+.badge-metal::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    transparent 25%,
+    rgba(255,255,255,0.6) 50%,
+    transparent 75%
+  );
+  transform: translateX(-120%);
+  animation: badge-shine 7s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.badge-metal::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px);
+  background-size: 3px 3px;
+  opacity: 0.15;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+
+@keyframes badge-shine {
+  0%   { transform: translateX(-140%); }
+  20%  { transform: translateX(140%);  }
+  100% { transform: translateX(140%);  }
+}
+
+.badge-engraved {
+  position: relative;
+  z-index: 2;
+  text-shadow:
+    0 0.03em 0 rgba(255,255,255,0.7),
+    0 -0.05em 0.08em rgba(0,0,0,0.8);
+}
+
+.love-coin {
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
+  transition: transform 0.25s ease;
+}
+.love-coin:hover {
+  transform: scale(1.08) rotate(-3deg);
+}
+
+.coin-shine {
+  animation: coinShine 4s linear infinite;
+}
+
+@keyframes coinShine {
+  0%   { transform: translateX(-120px); opacity: 0;   }
+  30%  {                                opacity: 0.8; }
+  50%  { transform: translateX(120px);  opacity: 0.6; }
+  100% { transform: translateX(240px);  opacity: 0;   }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   NATIVE ANDROID — منع الارتداد عند التمرير
+═══════════════════════════════════════════════════════════ */
+html, body {
+  overscroll-behavior: none;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SAFE AREA — شريط الحالة وشريط التنقل الأصلي
+═══════════════════════════════════════════════════════════ */
+
+/* ✅ دعم safe-area على كل الأجهزة */
+:root {
+  --safe-top:    env(safe-area-inset-top,    0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left:   env(safe-area-inset-left,   0px);
+  --safe-right:  env(safe-area-inset-right,  0px);
+
+  /* header و nav يأخذان الـ safe area بالحسبان */
+  --header-h-safe: calc(var(--header-h) + var(--safe-top));
+  --nav-h-safe:    calc(var(--nav-h)    + var(--safe-bottom));
+}
+
+/* ✅ body يحترم safe area لكن خلفيته تطابق html دائماً */
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  padding-top:      var(--safe-top);
+  padding-left:     var(--safe-left);
+  padding-right:    var(--safe-right);
+  background-color: var(--bg-main) !important;
+}
+
+.social-icon svg {
+  fill: currentColor !important;
+  stroke: none !important;
+  stroke-width: 0 !important;
 }
