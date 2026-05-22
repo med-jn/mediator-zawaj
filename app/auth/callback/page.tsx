@@ -9,7 +9,7 @@
 import { Suspense }                              from 'react';
 import { useEffect, useRef, useState }           from 'react';
 import { useRouter, useSearchParams, useParams } from 'next/navigation';
-import { supabase }                              from '@/lib/supabase';
+import { supabase }                              from '@/lib/supabase/client';
 
 const EDGE_URL = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/verify-handshake`;
 
