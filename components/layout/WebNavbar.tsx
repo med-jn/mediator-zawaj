@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from 'react';
 import { useRouter, usePathname }       from 'next/navigation';
 import Link                             from 'next/link';
 import { supabase }                     from '@/lib/supabase/client';
+import { Brand }                           from '@/components/ui/brand';
 import { LoveCoin }                     from '@/components/ui/LoveCoin';
 import { useApp }                       from '@/context/AppContext';
 import {
@@ -140,22 +141,9 @@ export function WebNavbar() {
         gap:            8,
         marginInlineEnd: 'auto',  // يدفع باقي العناصر لليسار في RTL
       }}>
-        <div style={{
-          width:        32, height: 32,
-          borderRadius: '50%',
-          background:   'linear-gradient(135deg, #800020, var(--color-primary))',
-          display:      'flex', alignItems: 'center', justifyContent: 'center',
-          fontSize:     16, fontWeight: 900, color: '#fff',
-        }}>
-          ز
-        </div>
-        <span style={{
-          fontSize:   15,
-          fontWeight: 800,
-          color:      'var(--text-main)',
-        }}>
-          زواج
-        </span>
+        
+        <Brand/> 
+    
       </Link>
 
       {/* ── روابط التنقل (مستخدم عادي فقط) ──────────── */}
