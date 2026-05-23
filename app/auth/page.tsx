@@ -4,6 +4,7 @@ import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams }    from 'next/navigation';
 import { supabase }                      from '@/lib/supabase/client';
 import { GoogleButton }                  from '@/components/ui/googlebutton';
+import { Brand }                         from '@/components/ui/brand';
 import { Loader2, Mail, CheckCircle }    from 'lucide-react';
 import { toast }                         from 'sonner';
 
@@ -55,33 +56,52 @@ function AuthForm() {
   );
 
   return (
-    <div style={{ minHeight: '100dvh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-main)', padding: '24px 16px' }}>
+    <div style={{
+      minHeight: '100dvh',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      background: 'var(--bg-main)', padding: '24px 16px',
+    }}>
 
-      {/* وهج الخلفية */}
-      <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', background: 'radial-gradient(ellipse 70% 50% at 50% 0%, rgba(179,51,75,0.18), transparent)' }} />
+      {/* وهج خلفي */}
+      <div style={{
+        position: 'fixed', inset: 0, pointerEvents: 'none',
+        background: 'radial-gradient(ellipse 80% 55% at 50% 0%, rgba(179,51,75,0.18), transparent)',
+      }} />
 
-      <div style={{ position: 'relative', width: '100%', maxWidth: 420, background: 'var(--bg-surface)', border: '1px solid var(--glass-border)', borderRadius: 'var(--radius-xl)', padding: 'clamp(32px,5vw,48px)', boxShadow: 'var(--shadow-deep)' }}>
+      <div style={{
+        position: 'relative', width: '100%', maxWidth: 420,
+        background: 'var(--bg-surface)',
+        border: '1px solid var(--glass-border)',
+        borderRadius: 'var(--radius-xl)',
+        padding: 'clamp(32px,5vw,48px)',
+        boxShadow: 'var(--shadow-deep)',
+      }}>
 
-        {/* خط علوي */}
-        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, borderRadius: 'var(--radius-xl) var(--radius-xl) 0 0', background: 'linear-gradient(90deg, var(--color-primary), transparent)' }} />
+        {/* شريط علوي بلون التمييز */}
+        <div style={{
+          position: 'absolute', top: 0, left: 0, right: 0, height: 3,
+          borderRadius: 'var(--radius-xl) var(--radius-xl) 0 0',
+          background: 'linear-gradient(90deg, var(--color-primary) 0%, #D4AF37 50%, transparent 100%)',
+        }} />
 
-        {/* Logo */}
-        <div style={{ textAlign: 'center', marginBottom: 36 }}>
-          <div style={{ width: 64, height: 64, borderRadius: '50%', background: 'linear-gradient(135deg, #800020, var(--color-primary))', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 28, fontWeight: 900, color: '#fff', margin: '0 auto 16px', boxShadow: '0 8px 32px var(--shadow-red-glow)' }}>
-            ز
-          </div>
-          <h1 style={{ fontSize: 'var(--text-2xl)', fontWeight: 900, color: 'var(--text-main)', marginBottom: 8 }}>
-            أهلاً بك
-          </h1>
-          <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-tertiary)', lineHeight: 'var(--lh-relaxed)' }}>
-            منصة التعارف الإسلامي عبر وسطاء موثوقين
-          </p>
+        {/* Brand */}
+        <div style={{ textAlign: 'center', marginBottom: 8 }}>
+          <Brand />
         </div>
+        <p style={{ textAlign: 'center', fontSize: 'var(--text-sm)', color: 'var(--text-tertiary)', marginBottom: 36, lineHeight: 'var(--lh-relaxed)' }}>
+          منصة الوسطاء الموثوقين للتعارف الإسلامي
+        </p>
 
         {sent ? (
+          /* ── تم الإرسال ── */
           <div style={{ textAlign: 'center', padding: '8px 0' }}>
-            <div style={{ width: 56, height: 56, borderRadius: '50%', background: 'rgba(34,197,94,0.1)', border: '1px solid rgba(34,197,94,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px' }}>
-              <CheckCircle size={28} style={{ color: '#22c55e' }} />
+            <div style={{
+              width: 60, height: 60, borderRadius: '50%',
+              background: 'rgba(34,197,94,0.1)', border: '1px solid rgba(34,197,94,0.3)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              margin: '0 auto 20px',
+            }}>
+              <CheckCircle size={30} style={{ color: '#22c55e' }} />
             </div>
             <p style={{ fontSize: 'var(--text-base)', fontWeight: 800, color: 'var(--text-main)', marginBottom: 10 }}>
               تحقق من بريدك الإلكتروني
@@ -90,9 +110,21 @@ function AuthForm() {
               أرسلنا رابط الدخول إلى<br />
               <strong style={{ color: 'var(--text-main)' }}>{email}</strong>
             </p>
-            <button onClick={() => setSent(false)} style={{ background: 'transparent', border: '1px solid var(--glass-border)', borderRadius: 'var(--radius-full)', color: 'var(--text-tertiary)', fontSize: 'var(--text-sm)', padding: '8px 20px', cursor: 'pointer', fontWeight: 600, fontFamily: 'inherit', transition: 'all 0.2s' }}
+            <button
+              onClick={() => setSent(false)}
+              style={{
+                background: 'transparent',
+                border: '1px solid var(--glass-border)',
+                borderRadius: 'var(--radius-full)',
+                color: 'var(--text-tertiary)',
+                fontSize: 'var(--text-sm)',
+                padding: '8px 24px',
+                cursor: 'pointer', fontWeight: 600, fontFamily: 'inherit',
+                transition: 'all 0.2s',
+              }}
               onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--border-soft)'; e.currentTarget.style.color = 'var(--color-primary)'; }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--glass-border)'; e.currentTarget.style.color = 'var(--text-tertiary)'; }}>
+              onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--glass-border)'; e.currentTarget.style.color = 'var(--text-tertiary)'; }}
+            >
               تغيير البريد الإلكتروني
             </button>
           </div>
@@ -102,25 +134,30 @@ function AuthForm() {
             <GoogleButton onClick={handleGoogle} />
 
             {/* فاصل */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12, margin: '4px 0' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
               <div style={{ flex: 1, height: 1, background: 'var(--glass-border)' }} />
-              <span style={{ fontSize: 11, color: 'var(--text-tertiary)', whiteSpace: 'nowrap' }}>أو عبر البريد الإلكتروني</span>
+              <span style={{ fontSize: 11, color: 'var(--text-tertiary)', whiteSpace: 'nowrap' }}>
+                أو عبر البريد الإلكتروني
+              </span>
               <div style={{ flex: 1, height: 1, background: 'var(--glass-border)' }} />
             </div>
 
             <form onSubmit={handleEmail} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-              <div>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
-                  placeholder="البريد الإلكتروني"
-                  required
-                  className="lux-input"
-                  style={{ textAlign: 'right' }}
-                />
-              </div>
-              <button type="submit" disabled={loading} className="btn-premium" style={{ width: '100%', height: 48, fontSize: 'var(--text-sm)', gap: 8 }}>
+              <input
+                type="email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                placeholder="البريد الإلكتروني"
+                required
+                className="lux-input"
+                style={{ textAlign: 'right' }}
+              />
+              <button
+                type="submit"
+                disabled={loading}
+                className="btn-premium"
+                style={{ width: '100%', height: 48, fontSize: 'var(--text-sm)', gap: 8 }}
+              >
                 {loading
                   ? <Loader2 size={16} style={{ animation: 'spin 0.8s linear infinite' }} />
                   : <Mail size={16} />}
@@ -128,7 +165,7 @@ function AuthForm() {
               </button>
             </form>
 
-            <p style={{ textAlign: 'center', fontSize: 11, color: 'var(--text-tertiary)', lineHeight: 'var(--lh-relaxed)', marginTop: 4 }}>
+            <p style={{ textAlign: 'center', fontSize: 11, color: 'var(--text-tertiary)', lineHeight: 'var(--lh-relaxed)' }}>
               بتسجيل دخولك توافق على شروط الاستخدام وسياسة الخصوصية
             </p>
           </div>

@@ -1,10 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-export function middleware(req: NextRequest) {
+export function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  if (pathname.startsWith('/_next') || pathname.startsWith('/api') || pathname.includes('.'))
-    return NextResponse.next();
+  if (
+    pathname.startsWith('/_next') ||
+    pathname.startsWith('/api')   ||
+    pathname.includes('.')
+  ) return NextResponse.next();
 
   const role = req.cookies.get('user_role')?.value;
 
