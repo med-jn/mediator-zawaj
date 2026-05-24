@@ -212,7 +212,7 @@ export default function AgentPage() {
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', marginBottom: 10 }}>
                 <span style={{ fontSize: 'clamp(18px,3vw,24px)', fontWeight: 900, color: 'var(--text-main)' }}>{profile?.full_name}</span>
-                {profile?.mediator_level && profile.mediator_level !== 'none' && <LevelBadge level={profile.mediator_level} />}
+                {totalClients > 0 && <LevelBadge subscribers={totalClients} />}
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
                 {activeCount > 0 && <p style={{ fontSize: 12, color: 'var(--text-tertiary)' }}><span style={{ color: '#34d399', fontWeight: 700 }}>{activeCount}</span> عميل نشط</p>}
