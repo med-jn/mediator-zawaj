@@ -18,8 +18,8 @@ const cairo = Cairo({
 });
 
 export const metadata: Metadata = {
-  title:       { default: 'زواج | منصة الوسطاء', template: '%s | زواج' },
-  description: 'التعارف الإسلامي الموثوق عبر وسطاء معتمدين',
+  title:       { default: 'ZAWAJ AI | منصة الوسطاء', template: '%s | زواج' },
+  description: 'التعارف الجاد قصد الزواج عبر وسطاء معتمدين',
 };
 
 export const viewport: Viewport = {
