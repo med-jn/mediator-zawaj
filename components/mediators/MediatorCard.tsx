@@ -120,7 +120,7 @@ export function MediatorCard({
             <h3 className="font-black" style={{ fontSize: 'var(--text-base)', color: 'var(--text-main)' }}>
               {mediator.full_name}
             </h3>
-            <LevelBadge subscribers={mediator.total_subscribers} size="sm" />
+            <LevelBadge subscribers={mediator.total_subscribers} />
           </div>
 
           {/* المدينة */}

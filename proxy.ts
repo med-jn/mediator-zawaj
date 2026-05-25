@@ -19,12 +19,28 @@ export function proxy(req: NextRequest) {
 
   const isProtected = pathname.startsWith('/wallet') || pathname.startsWith('/agent');
   if (isProtected && !role)
-    return NextResponse.redirect(new URL(`/auth?return=${encodeURIComponent(pathname)}`, req.url));
+    return NextResponse.redirect(
+      new URL(`/auth?return=${encodeURIComponent(pathname)}`, req.url)
+    );
 
   if (pathname === '/auth' && role)
-    return NextResponse.redirect(new URL(role === 'mediator' ? '/agent' : '/mediators', req.url));
+    return NextResponse.redirect(
+      new URL(role === 'mediator' ? '/agent' : '/mediators', req.url)
+    );
 
-  return NextResponse.next();
+  const res = NextResponse.next();
+
+  // Vercel يضع الدولة تلقائياً — نحفظها في cookie لقراءتها client-side
+  const country = req.headers.get('x-vercel-ip-country') ?? 'TN';
+  if (!req.cookies.get('geo_country')?.value) {
+    res.cookies.set('geo_country', country, {
+      path:     '/',
+      maxAge:   60 * 60 * 24 * 30, // شهر
+      sameSite: 'lax',
+    });
+  }
+
+  return res;
 }
 
 export const config = {

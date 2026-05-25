@@ -207,7 +207,7 @@ export default function MediatorsPage() {
                       <p style={{ fontWeight: 900, fontSize: 'var(--text-base)', color: 'var(--text-main)' }}>
                         {selected.full_name}
                       </p>
-                      <LevelBadge subscribers={selected.total_subscribers} size="sm" />
+                      <LevelBadge subscribers={selected.total_subscribers} />
                     </div>
                     <Stars value={selected.avg_rating} size={12} />
                   </div>

@@ -1,48 +1,49 @@
 'use client';
 
 import { createContext, useContext, useEffect, useState } from 'react';
-
-export type Currency = 'TND' | 'USD' | 'EUR';
+import { getDefaultCurrency } from '@/lib/currency';
 
 type AppContextType = {
-  isDark:       boolean;
-  toggleTheme:  () => void;
-  currency:     Currency;
-  setCurrency:  (c: Currency) => void;
-  mounted:      boolean;
+  isDark:      boolean;
+  toggleTheme: () => void;
+  currency:    string;
+  setCurrency: (c: string) => void;
+  countryCode: string;
+  mounted:     boolean;
 };
 
 const AppContext = createContext<AppContextType | null>(null);
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
-  const [isDark,    setIsDark]    = useState(true);   // dark افتراضي
-  const [currency,  setCurrencyS] = useState<Currency>('TND');
-  const [mounted,   setMounted]   = useState(false);
+  const [isDark,      setIsDark]      = useState(true);
+  const [currency,    setCurrencyS]   = useState('TND');
+  const [countryCode, setCountryCode] = useState('TN');
+  const [mounted,     setMounted]     = useState(false);
 
-  // ── ثيم ──────────────────────────────────────────────
   useEffect(() => {
-    const saved = localStorage.getItem('theme');
-    // افتراضي: dark (يتناسب مع هوية التطبيق)
-    setIsDark(saved ? saved === 'dark' : true);
+    // ── الدولة من cookie (تكتبها proxy.ts من Vercel Geo) ──
+    const match = document.cookie.match(/(?:^|;\s*)geo_country=([A-Z]{2})/);
+    const code  = match?.[1] ?? 'TN';
+    setCountryCode(code);
+
+    // ── العملة: المحفوظة أو الافتراضية للدولة ──
+    const savedCurrency = localStorage.getItem('currency');
+    setCurrencyS(savedCurrency ?? getDefaultCurrency(code));
+
+    // ── الثيم ──
+    const savedTheme = localStorage.getItem('theme');
+    setIsDark(savedTheme ? savedTheme === 'dark' : true);
+
     setMounted(true);
   }, []);
 
   useEffect(() => {
     if (!mounted) return;
-    // نستخدم class="light" فقط لأن globals.css يستهدف html.light
     document.documentElement.classList.toggle('light', !isDark);
     localStorage.setItem('theme', isDark ? 'dark' : 'light');
   }, [isDark, mounted]);
 
-  // ── عملة ─────────────────────────────────────────────
-  useEffect(() => {
-    const saved = localStorage.getItem('currency') as Currency;
-    if (saved && (['TND', 'USD', 'EUR'] as Currency[]).includes(saved)) {
-      setCurrencyS(saved);
-    }
-  }, []);
-
-  const setCurrency = (c: Currency) => {
+  const setCurrency = (c: string) => {
     setCurrencyS(c);
     localStorage.setItem('currency', c);
   };
@@ -53,6 +54,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       toggleTheme: () => setIsDark(p => !p),
       currency,
       setCurrency,
+      countryCode,
       mounted,
     }}>
       {children}

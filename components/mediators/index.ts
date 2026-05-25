@@ -1,6 +1,5 @@
 export { Icon, StarFilled }  from './Icon';
 export { Stars }             from './Stars';
-export { LevelBadge }        from './LevelBadge';
 export { Row }               from './Row';
 export { ConfirmRow }        from './ConfirmRow';
 export { SuccessScreen }     from './SuccessScreen';

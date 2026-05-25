@@ -1,5 +1,5 @@
-import { CoinBalance } from './CoinBalance';
-import { getEconomyErrorMessage } from '@/utils/economyErrors';
+import { CoinBalance } from '@/components/ui/CoinBalance';
+import { getEconomyErrorMessage } from '@/lib/EconomyErrors';
 
 interface EconomyModalProps {
   isOpen: boolean;

@@ -25,6 +25,13 @@ export interface LevelBadgeProps {
 
   scale?: number;
 
+  /**
+   * اختصار الحجم — يُحوَّل لـ scale تلقائياً
+   * sm=11 | md=14 | lg=18 | بدون قيمة=16
+   */
+
+  size?: 'sm' | 'md' | 'lg';
+
 }
 
 /* ====================================================== */
@@ -121,9 +128,17 @@ const LevelBadge: React.FC<LevelBadgeProps> = ({
 
   className = '',
 
-  scale = 16,
+  scale: scaleProp,
+
+  size,
 
 }) => {
+
+  const scale = scaleProp ?? (
+    size === 'sm' ? 11 :
+    size === 'md' ? 14 :
+    size === 'lg' ? 18 : 16
+  );
 
   /* ==================================================== */
   /* LEVEL */

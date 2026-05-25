@@ -7,7 +7,10 @@ import Image           from 'next/image';
 import { useApp }      from '@/context/AppContext';
 import { supabase }    from '@/lib/supabase/client';
 import { LoveCoin }    from '@/components/ui/LoveCoin';
-import { CURRENCY_INFO, formatPrice, getCurrencyOptions } from '@/lib/currency';
+import {
+  CURRENCY_INFO, formatPrice,
+  getCurrencyOptions, getDefaultCurrency,
+} from '@/lib/currency';
 import { toast }       from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -42,9 +45,9 @@ function AvatarFallback({ name, size = 44 }: { name: string; size?: number }) {
 
 export default function WalletPage() {
   const router = useRouter();
-  const { isDark, currency, setCurrency } = useApp();
-  const currOptions = getCurrencyOptions();
-  const currInfo    = CURRENCY_INFO[currency];
+  const { isDark, currency, setCurrency, countryCode } = useApp();
+  const currOptions = getCurrencyOptions(countryCode, currency);
+  const currInfo    = CURRENCY_INFO[currency] ?? { symbol: currency, decimals: 2 };
 
   const [userId,      setUserId]      = useState('');
   const [balance,     setBalance]     = useState<number | null>(null);
