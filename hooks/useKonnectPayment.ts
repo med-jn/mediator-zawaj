@@ -1,42 +1,22 @@
 'use client';
 /**
  * 📁 hooks/useKonnectPayment.ts — ZAWAJ AI
- * ✅ يستخدم zawaj:// scheme للـ deep link — يعمل على Android
  * ✅ يرسل JWT للـ Edge Function
+ * ✅ مخصص للويب فقط
  */
 import { useState, useCallback, useEffect, useRef } from 'react';
-import { Capacitor }  from '@capacitor/core';
-import { Browser }    from '@capacitor/browser';
-import { App }        from '@capacitor/app';
 import { supabase }   from '@/lib/supabase/client';
 import { toast }      from 'sonner';
 import type { PurchasePayload, SupportedCurrency } from '@/constants/ecomomy';
 
 export type PaymentState = 'idle' | 'initiating' | 'awaiting' | 'success' | 'failed';
 
-const IS_NATIVE     = Capacitor.isNativePlatform();
 const EDGE_FUNC_URL = 'https://lbftmbutvtjtkxgdbndu.supabase.co/functions/v1/konnect-initiate';
 
 export function useKonnectPayment(currency: SupportedCurrency) {
   const [paymentState,    setPaymentState]    = useState<PaymentState>('idle');
   const [activePaymentId, setActivePaymentId] = useState<string | null>(null);
   const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
-
-  // ── Deep link — zawaj://payment/success أو /fail ─────────
-  useEffect(() => {
-    if (!IS_NATIVE) return;
-    const listener = App.addListener('appUrlOpen', ({ url }) => {
-      if (url.includes('payment/success')) {
-        setPaymentState('awaiting');
-        toast.info('جارٍ التحقق من الدفع…');
-      } else if (url.includes('payment/fail')) {
-        setPaymentState('failed');
-        toast.error('تعذّر إتمام الدفع. حاول مجدداً.');
-        Browser.close();
-      }
-    });
-    return () => { listener.then(h => h.remove()); };
-  }, []);
 
   // ── Realtime ──────────────────────────────────────────────
   useEffect(() => {
@@ -53,12 +33,10 @@ export function useKonnectPayment(currency: SupportedCurrency) {
         if (status === 'completed') {
           setPaymentState('success');
           toast.success('🎉 تم الشحن بنجاح! تمت إضافة نقاطك.');
-          IS_NATIVE && Browser.close();
           cleanup();
         } else if (status === 'failed' || status === 'expired') {
           setPaymentState('failed');
           toast.error('فشل الدفع. لم يُخصم شيء من رصيدك.');
-          IS_NATIVE && Browser.close();
           cleanup();
         }
       })
@@ -105,11 +83,7 @@ export function useKonnectPayment(currency: SupportedCurrency) {
       setActivePaymentId(paymentId);
       setPaymentState('awaiting');
 
-      if (IS_NATIVE) {
-        await Browser.open({ url: payUrl, windowName: '_self', presentationStyle: 'popover' });
-      } else {
-        window.open(payUrl, '_blank');
-      }
+      window.location.href = payUrl; // توجيه المستخدم لصفحة الدفع في نفس النافذة
 
     } catch (err: any) {
       console.error('[useKonnectPayment]', err);
