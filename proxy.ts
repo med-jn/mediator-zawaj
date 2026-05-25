@@ -17,6 +17,9 @@ export function proxy(req: NextRequest) {
   if (role === 'user' && pathname.startsWith('/agent'))
     return NextResponse.redirect(new URL('/mediators', req.url));
 
+  if (role !== 'mediator' && pathname.startsWith('/mediator-pricing'))
+    return NextResponse.redirect(new URL('/mediators', req.url));
+
   const isProtected = pathname.startsWith('/wallet') || pathname.startsWith('/agent');
   if (isProtected && !role)
     return NextResponse.redirect(
