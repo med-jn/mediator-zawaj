@@ -26,20 +26,13 @@ export function proxy(req: NextRequest) {
       new URL(`/auth?return=${encodeURIComponent(pathname)}`, req.url)
     );
 
-  if (pathname === '/auth' && role)
-    return NextResponse.redirect(
-      new URL(role === 'mediator' ? '/agent' : '/mediators', req.url)
-    );
-
+  // ✅ /auth: لا توجيه هنا — الصفحة نفسها تتولى الأمر
   const res = NextResponse.next();
 
-  // Vercel يضع الدولة تلقائياً — نحفظها في cookie لقراءتها client-side
   const country = req.headers.get('x-vercel-ip-country') ?? 'TN';
   if (!req.cookies.get('geo_country')?.value) {
     res.cookies.set('geo_country', country, {
-      path:     '/',
-      maxAge:   60 * 60 * 24 * 30, // شهر
-      sameSite: 'lax',
+      path: '/', maxAge: 60 * 60 * 24 * 30, sameSite: 'lax',
     });
   }
 
