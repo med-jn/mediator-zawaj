@@ -32,10 +32,8 @@ export function WebNavbar() {
   const isAuthPage = pathname.startsWith('/auth');
   const isMediator = user?.role === 'mediator';
 
-  /* ── إغلاق عند تغيير الصفحة ── */
   useEffect(() => { setOpen(false); }, [pathname]);
 
-  /* ── جلب بيانات المستخدم ── */
   useEffect(() => {
     const init = async () => {
       const { data: { session } } = await supabase.auth.getSession();
@@ -53,7 +51,6 @@ export function WebNavbar() {
     return () => subscription.unsubscribe();
   }, []);
 
-  /* ── إغلاق القائمة بالنقر خارجها ── */
   useEffect(() => {
     const h = (e: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(e.target as Node))
@@ -76,113 +73,94 @@ export function WebNavbar() {
     ? user.full_name.trim().split(' ').slice(0, 2).map(w => w[0]).join('').toUpperCase()
     : '';
 
-  const surface = isDark ? 'var(--bg-surface)' : '#fff';
-  const bdr     = 'var(--glass-border)';
+  const bdr = 'var(--glass-border)';
 
   return (
     <>
       <style>{`
-        .drop-item { transition: background 0.15s; }
-        .drop-item:hover { background: var(--color-primary-xsoft) !important; }
-        .drop-item.active { background: var(--color-primary-xsoft); }
-        .drop-logout:hover { background: rgba(239,68,68,0.08) !important; }
-        .drop-theme:hover  { background: var(--bg-elevated) !important; }
+        .nav-drop-item { transition: background 0.15s; color: var(--text-secondary); }
+        .nav-drop-item:hover { background: var(--color-primary-xsoft) !important; color: var(--color-primary) !important; }
+        .nav-drop-item.is-active { background: var(--color-primary-xsoft); color: var(--color-primary); font-weight: 700; }
+        .nav-drop-logout { transition: background 0.15s; }
+        .nav-drop-logout:hover { background: rgba(239,68,68,0.08) !important; }
+        .nav-drop-theme { transition: background 0.15s; }
+        .nav-drop-theme:hover { background: var(--bg-elevated) !important; }
+        .nav-menu-btn { transition: all 0.2s; }
+        .nav-menu-btn:hover { border-color: var(--border-soft) !important; background: var(--color-primary-xsoft) !important; }
       `}</style>
 
       <nav style={{
         position:   'fixed', top: 0, left: 0, right: 0, zIndex: 1000,
         height:     'var(--nav-h)',
         display:    'flex', alignItems: 'center', justifyContent: 'space-between',
-        padding:    '0 clamp(16px, 4vw, 36px)',
-        background: isDark ? 'rgba(8,0,8,0.88)' : 'rgba(255,255,255,0.90)',
+        padding:    '0 clamp(16px, 4vw, 32px)',
+        background: isDark ? 'rgba(8,0,8,0.90)' : 'rgba(255,255,255,0.92)',
         backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)',
         borderBottom: `1px solid ${bdr}`,
+        overflow: 'hidden',
       }}>
 
-        {/* ── براند — يمين (RTL start) ── */}
-        <Link href={isMediator ? '/agent' : '/mediators'} style={{ textDecoration: 'none' }}>
-          <Brand />
-        </Link>
-
-        {/* ── زر القائمة — يسار (RTL end) ── */}
-        <div ref={menuRef} style={{ position: 'relative' }}>
+        {/* ── زر القائمة — يمين (أول عنصر في RTL) ── */}
+        <div ref={menuRef} style={{ position: 'relative', flexShrink: 0 }}>
 
           {user ? (
-            /* مستخدم مسجّل — زر هامبرغر مع أفاتار */
             <motion.button
-              whileTap={{ scale: 0.92 }}
+              whileTap={{ scale: 0.90 }}
               onClick={() => setOpen(v => !v)}
+              className="nav-menu-btn"
               style={{
-                display: 'flex', alignItems: 'center', gap: 8,
-                padding: '5px 10px 5px 5px',
-                borderRadius: 'var(--radius-full)',
-                border: `1px solid ${open ? 'var(--border-soft)' : bdr}`,
-                background: open
-                  ? 'var(--color-primary-xsoft)'
-                  : isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)',
-                cursor: 'pointer', transition: 'all 0.2s',
+                width: 44, height: 44,
+                borderRadius: 'var(--radius-md)',
+                border: `1.5px solid ${open ? 'var(--border-soft)' : bdr}`,
+                background: open ? 'var(--color-primary-xsoft)' : 'transparent',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                cursor: 'pointer',
               }}
             >
-              {/* أفاتار دائري */}
-              <div style={{
-                width: 30, height: 30, borderRadius: '50%',
-                overflow: 'hidden', flexShrink: 0,
-                background: 'linear-gradient(135deg, #800020, var(--color-primary))',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-              }}>
-                {user.avatar_url && !avatarError ? (
-                  <img
-                    src={user.avatar_url} alt=""
-                    style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-                    onError={() => setAvatarError(true)}
-                  />
-                ) : (
-                  <span style={{ fontSize: 11, fontWeight: 800, color: '#fff', lineHeight: 1 }}>
-                    {initials}
-                  </span>
-                )}
-              </div>
-
-              {/* أيقونة Menu/X */}
               <AnimatePresence mode="wait" initial={false}>
                 {open ? (
                   <motion.span key="x"
-                    initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }}
-                    exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.15 }}>
-                    <X size={15} style={{ color: 'var(--color-primary)', display: 'block' }} />
+                    initial={{ rotate: -90, opacity: 0 }}
+                    animate={{ rotate: 0,   opacity: 1 }}
+                    exit={{   rotate:  90, opacity: 0 }}
+                    transition={{ duration: 0.14 }}
+                    style={{ display: 'flex' }}>
+                    <X size={22} style={{ color: 'var(--color-primary)' }} />
                   </motion.span>
                 ) : (
                   <motion.span key="m"
-                    initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }}
-                    exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.15 }}>
-                    <Menu size={15} style={{ color: 'var(--text-tertiary)', display: 'block' }} />
+                    initial={{ rotate:  90, opacity: 0 }}
+                    animate={{ rotate: 0,   opacity: 1 }}
+                    exit={{   rotate: -90, opacity: 0 }}
+                    transition={{ duration: 0.14 }}
+                    style={{ display: 'flex' }}>
+                    <Menu size={22} style={{ color: 'var(--text-main)' }} />
                   </motion.span>
                 )}
               </AnimatePresence>
             </motion.button>
           ) : (
-            /* زائر — زر دخول */
             <Link href="/auth" style={{ textDecoration: 'none' }}>
-              <button className="btn-premium" style={{ height: 38, padding: '0 24px', fontSize: 13 }}>
+              <button className="btn-premium" style={{ height: 38, padding: '0 22px', fontSize: 13 }}>
                 دخول
               </button>
             </Link>
           )}
 
-          {/* ════════ DROPDOWN ════════ */}
+          {/* ════ DROPDOWN ════ */}
           <AnimatePresence>
             {open && user && (
               <motion.div
                 initial={{ opacity: 0, y: -8, scale: 0.96 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -8, scale: 0.96 }}
+                animate={{ opacity: 1, y:  0, scale: 1    }}
+                exit={{   opacity: 0, y: -8, scale: 0.96 }}
                 transition={{ duration: 0.16, ease: 'easeOut' }}
                 style={{
                   position: 'absolute',
                   top: 'calc(100% + 10px)',
-                  insetInlineEnd: 0,
-                  minWidth: 232,
-                  background: surface,
+                  insetInlineStart: 0,
+                  minWidth: 240,
+                  background: isDark ? 'var(--bg-surface)' : '#fff',
                   border: `1px solid ${bdr}`,
                   borderRadius: 'var(--radius-lg)',
                   boxShadow: 'var(--shadow-deep)',
@@ -190,7 +168,6 @@ export function WebNavbar() {
                   zIndex: 100,
                 }}
               >
-
                 {/* الهوية */}
                 <div style={{
                   display: 'flex', alignItems: 'center', gap: 12,
@@ -204,16 +181,20 @@ export function WebNavbar() {
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                   }}>
                     {user.avatar_url && !avatarError ? (
-                      <img src={user.avatar_url} alt=""
+                      <img
+                        src={user.avatar_url} alt=""
                         style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-                        onError={() => setAvatarError(true)} />
+                        onError={() => setAvatarError(true)}
+                      />
                     ) : (
                       <span style={{ fontSize: 14, fontWeight: 800, color: '#fff' }}>{initials}</span>
                     )}
                   </div>
                   <p style={{
-                    fontSize: 14, fontWeight: 800, color: 'var(--text-main)',
+                    fontSize: 14, fontWeight: 800,
+                    color: 'var(--text-main)',
                     overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                    flex: 1, minWidth: 0,
                   }}>
                     {user.full_name}
                   </p>
@@ -223,71 +204,85 @@ export function WebNavbar() {
                 <div style={{ padding: '6px 0' }}>
                   {!isMediator && (
                     <>
-                      <DropItem href="/mediators" icon={<Users size={15}/>}  label="الوسطاء"  active={pathname === '/mediators'}        />
-                      <DropItem href="/wallet"    icon={<Wallet size={15}/>} label="المحفظة"  active={pathname.startsWith('/wallet')}   />
+                      <DropItem href="/mediators" icon={<Users size={16}/>}  label="الوسطاء"  active={pathname === '/mediators'}      />
+                      <DropItem href="/wallet"    icon={<Wallet size={16}/>} label="المحفظة"  active={pathname.startsWith('/wallet')} />
                     </>
                   )}
                   {isMediator && (
                     <>
-                      <DropItem href="/agent"            icon={<LayoutDashboard size={15}/>} label="لوحة التحكم"  active={pathname.startsWith('/agent')}        />
-                      <DropItem href="/mediator-pricing" icon={<Settings size={15}/>}        label="إعداد العروض" active={pathname === '/mediator-pricing'}     />
+                      <DropItem href="/agent"            icon={<LayoutDashboard size={16}/>} label="لوحة التحكم"  active={pathname.startsWith('/agent')}        />
+                      <DropItem href="/mediator-pricing" icon={<Settings size={16}/>}        label="إعداد العروض" active={pathname === '/mediator-pricing'}     />
                     </>
                   )}
 
                   {/* الثيم */}
                   <button
                     onClick={toggleTheme}
-                    className="drop-theme"
+                    className="nav-drop-theme"
                     style={{
-                      width: '100%', display: 'flex', alignItems: 'center', gap: 10,
+                      width: '100%', display: 'flex', alignItems: 'center', gap: 12,
                       padding: '10px 16px', background: 'transparent', border: 'none',
                       color: 'var(--text-tertiary)', fontSize: 13, fontWeight: 500,
                       cursor: 'pointer', fontFamily: 'inherit',
                     }}
                   >
-                    {isDark ? <Sun size={15}/> : <Moon size={15}/>}
+                    {isDark ? <Sun size={16}/> : <Moon size={16}/>}
                     {isDark ? 'الوضع النهاري' : 'الوضع الليلي'}
                   </button>
                 </div>
 
                 {/* تسجيل خروج */}
-                <div style={{ padding: '6px 0 8px', borderTop: `1px solid ${bdr}` }}>
+                <div style={{ borderTop: `1px solid ${bdr}`, padding: '6px 0 6px' }}>
                   <button
                     onClick={handleLogout}
-                    className="drop-logout"
+                    className="nav-drop-logout"
                     style={{
-                      width: '100%', display: 'flex', alignItems: 'center', gap: 10,
+                      width: '100%', display: 'flex', alignItems: 'center', gap: 12,
                       padding: '10px 16px', background: 'transparent', border: 'none',
                       color: '#f87171', fontSize: 13, fontWeight: 600,
                       cursor: 'pointer', fontFamily: 'inherit',
                     }}
                   >
-                    <LogOut size={15}/> تسجيل خروج
+                    <LogOut size={16}/> تسجيل خروج
                   </button>
                 </div>
-
               </motion.div>
             )}
           </AnimatePresence>
         </div>
+
+        {/* ── براند — يسار (آخر عنصر في RTL) — scale 65% ── */}
+        <Link
+          href={isMediator ? '/agent' : '/mediators'}
+          style={{ textDecoration: 'none', flexShrink: 0 }}
+        >
+          <div style={{
+            transform: 'scale(0.65)',
+            transformOrigin: 'right center',
+            marginInlineStart: '-18%',
+          }}>
+            <Brand />
+          </div>
+        </Link>
+
       </nav>
     </>
   );
 }
 
-/* ── عنصر في القائمة ── */
 function DropItem({ href, icon, label, active }: {
   href: string; icon: React.ReactNode; label: string; active: boolean;
 }) {
   return (
     <Link href={href} style={{ textDecoration: 'none' }}>
       <div
-        className={`drop-item${active ? ' active' : ''}`}
+        className={`nav-drop-item${active ? ' is-active' : ''}`}
         style={{
-          display: 'flex', alignItems: 'center', gap: 10,
+          display: 'flex', alignItems: 'center', gap: 12,
           padding: '10px 16px',
-          color: active ? 'var(--color-primary)' : 'var(--text-secondary)',
-          fontSize: 13, fontWeight: active ? 700 : 500, cursor: 'pointer',
+          fontSize: 13,
+          fontWeight: active ? 700 : 500,
+          cursor: 'pointer',
         }}
       >
         {icon}{label}

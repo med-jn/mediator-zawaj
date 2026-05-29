@@ -6,10 +6,8 @@
    الثيم الداكن — افتراضي
 ══════════════════════════════════════════ */
 :root {
-  /* ✅ مضاف — كان مفقوداً */
   color-scheme: dark;
 
-  /* ── الألوان ──────────────────────────── */
   --color-primary:        #B3334B;
   --color-primary-hover:  #962B3F;
   --color-primary-soft:   rgba(179,51,75,0.20);
@@ -46,17 +44,8 @@
   --input-line-focus:  #A4161A;
   --input-placeholder: rgba(255,255,255,0.50);
 
-  /* ══════════════════════════════════════════
-     مقياس المستخدم — يُضبط عبر JS (useSystemScale)
-     القيمة الافتراضية 1 = بدون تغيير
-  ══════════════════════════════════════════ */
   --user-scale: 1;
 
-  /* ══════════════════════════════════════════
-     نظام الأحجام العالمي — rem × --user-scale
-  ══════════════════════════════════════════ */
-
-  /* ── أحجام النص ──────────────────────── */
   --text-2xs:  calc(clamp(0.625rem,  0.6875rem, 0.75rem)   * var(--user-scale));
   --text-xs:   calc(clamp(0.6875rem, 0.75rem,   0.875rem)  * var(--user-scale));
   --text-sm:   calc(clamp(0.75rem,   0.8125rem, 0.9375rem) * var(--user-scale));
@@ -67,38 +56,27 @@
   --text-2xl:  calc(clamp(1.25rem,   1.5rem,    1.875rem)  * var(--user-scale));
   --text-3xl:  calc(clamp(1.5rem,    1.875rem,  2.25rem)   * var(--user-scale));
 
-  /* ── المسافات — نظام 4px ──────────────── */
-  --sp-1:  0.25rem;
-  --sp-2:  0.5rem;
-  --sp-3:  0.75rem;
-  --sp-4:  1rem;
-  --sp-5:  1.25rem;
-  --sp-6:  1.5rem;
-  --sp-8:  2rem;
-  --sp-10: 2.5rem;
-  --sp-12: 3rem;
+  --sp-1:  0.25rem;  --sp-2:  0.5rem;  --sp-3:  0.75rem;
+  --sp-4:  1rem;     --sp-5:  1.25rem; --sp-6:  1.5rem;
+  --sp-8:  2rem;     --sp-10: 2.5rem;  --sp-12: 3rem;
   --sp-16: 4rem;
 
-  /* ── مكونات ──────────────────────────── */
   --nav-h:    3.875rem;
   --header-h: 3.5rem;
   --btn-h:    2.75rem;
   --btn-h-lg: 3.25rem;
 
-  /* ── أيقونات — تتكيف مع --user-scale ─── */
   --icon-sm: calc(1rem    * var(--user-scale));
   --icon-md: calc(1.25rem * var(--user-scale));
   --icon-lg: calc(1.5rem  * var(--user-scale));
   --icon-xl: calc(2rem    * var(--user-scale));
 
-  /* ── الأفاتار — تتكيف مع --user-scale ── */
   --avatar-xs: calc(1.75rem * var(--user-scale));
   --avatar-sm: calc(2.5rem  * var(--user-scale));
   --avatar-md: calc(3.25rem * var(--user-scale));
   --avatar-lg: calc(4rem    * var(--user-scale));
   --avatar-xl: calc(6rem    * var(--user-scale));
 
-  /* ── نصف الأقطار ─────────────────────── */
   --radius-xs:   0.75rem;
   --radius-sm:   1.0rem;
   --radius-md:   1.5rem;
@@ -107,14 +85,20 @@
   --radius-2xl:  4rem;
   --radius-full: 9999px;
 
-  /* ── التباعد بين الأسطر ──────────────── */
   --lh-tight:   1.25;
   --lh-snug:    1.375;
   --lh-normal:  1.5;
   --lh-relaxed: 1.625;
 
-  /* ── متغير legacy (احتياطي) ─────────── */
   --base-font-size: 1rem;
+
+  --safe-top:    env(safe-area-inset-top,    0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left:   env(safe-area-inset-left,   0px);
+  --safe-right:  env(safe-area-inset-right,  0px);
+
+  --header-h-safe: calc(var(--header-h) + var(--safe-top));
+  --nav-h-safe:    calc(var(--nav-h)    + var(--safe-bottom));
 }
 
 /* ══════════════════════════════════════════
@@ -170,29 +154,21 @@ html.light {
     min-width: 0;
   }
 
-  /* أيقونات Lucide افتراضياً مفرغة — بدون !important حتى يتغلب inline style */
   svg {
     fill: none;
     stroke: currentColor;
     stroke-width: 2px;
   }
 
-
-
-  /* ── استثناء لأيقونات Lucide داخل .icon-wrap ── */
   .icon-wrap svg {
     fill: revert-layer !important;
     stroke: revert-layer !important;
     stroke-width: revert-layer !important;
   }
 
-  /* ── استثناء لـ polygon/path داخل .icon-fill ── */
-  .icon-fill polygon,
-  .icon-fill path,
-  .icon-fill circle,
-  .icon-fill rect,
-  .icon-fill line,
-  .icon-fill polyline {
+  .icon-fill polygon, .icon-fill path,
+  .icon-fill circle,  .icon-fill rect,
+  .icon-fill line,    .icon-fill polyline {
     fill: inherit !important;
     stroke: inherit !important;
     stroke-width: inherit !important;
@@ -202,9 +178,10 @@ html.light {
     font-size: 100%;
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
-    /* ✅ يغطي كامل الشاشة بما فيها منطقة الـ safe area */
     min-height: 100%;
     background-color: var(--bg-main);
+    /* ✅ إصلاح RTL — يمنع انزياح الصفحة أفقياً */
+    overflow-x: clip;
   }
 
   body {
@@ -216,9 +193,11 @@ html.light {
     margin: 0;
     -webkit-tap-highlight-color: transparent;
     overflow-x: hidden;
-    /* ✅ يمتد لكامل ارتفاع الشاشة — يمنع الشريط الأبيض السفلي */
     min-height: 100vh;
     min-height: 100dvh;
+    padding-top: var(--safe-top);
+    /* لا padding أفقي — يُسبب انزياحاً في RTL */
+    background-color: var(--bg-main) !important;
   }
 
   h1 { font-size: var(--text-3xl); line-height: var(--lh-tight);   font-weight: 900; margin: 0; }
@@ -227,31 +206,22 @@ html.light {
   h4 { font-size: var(--text-lg);  line-height: var(--lh-snug);    font-weight: 700; margin: 0; }
   p  { font-size: var(--text-base);line-height: var(--lh-relaxed); margin: 0; }
 
-  input, textarea, select, button {
-    font-family: inherit;
-    font-size: inherit;
-  }
+  input, textarea, select, button { font-family: inherit; font-size: inherit; }
 
-  input[type="date"]::-webkit-calendar-picker-indicator {
-    opacity: 0.5;
-    filter: invert(1);
-  }
-  html.light input[type="date"]::-webkit-calendar-picker-indicator {
-    filter: none;
-  }
+  input[type="date"]::-webkit-calendar-picker-indicator { opacity: 0.5; filter: invert(1); }
+  html.light input[type="date"]::-webkit-calendar-picker-indicator { filter: none; }
 }
 
 /* ══════════════════════════════════════════
    المكوّنات
 ══════════════════════════════════════════ */
+@layer components {
 
-  @layer components {
-
-    .text-gold-luxury {
+  .text-gold-luxury {
     -webkit-text-stroke: 0.3px #d4af37;
-    text-shadow: 
+    text-shadow:
       0 0 15px var(--shadow-gold-glow),
-      inset 0 1px 2px rgba(255, 255, 255, 0.4);
+      inset 0 1px 2px rgba(255,255,255,0.4);
   }
 
   .glass-panel {
@@ -265,35 +235,27 @@ html.light {
   }
 
   .btn-premium {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--sp-2);
-  padding: 0 var(--sp-6);
-  height: 2.4rem;
-  border-radius: 1.75rem;
-  font-size: var(--text-sm);
-  font-weight: 700;
-  border: none;
-  cursor: pointer;
-  position: relative;
-  transition: all 0.15s ease;
-  
-  background: var(--color-primary);
-  color: white;
-  box-shadow: 0 px 1px rgb(129,01,25,0.7);
-  top: 0;
-}
-
-.btn-premium:hover {
-  filter: brightness(1.1);
-}
-
-.btn-premium:active {
-  top: 3px;
-  box-shadow: 0 1px 0px #852638;
-}
-  .btn-premium:active { transform: scale(0.98); }
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--sp-2);
+    padding: 0 var(--sp-6);
+    height: 2.4rem;
+    border-radius: 1.75rem;
+    font-size: var(--text-sm);
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.15s ease;
+    background: var(--color-primary);
+    color: white;
+    box-shadow: 0 4px 12px rgba(179,51,75,0.4);
+    top: 0;
+  }
+  .btn-premium:hover  { filter: brightness(1.1); }
+  .btn-premium:active { top: 2px; transform: scale(0.98); box-shadow: 0 1px 0 #852638; }
 
   :root:not(html.light) .btn-premium::after {
     content: '';
@@ -307,26 +269,23 @@ html.light {
   :root:not(html.light) .btn-premium:hover::after { left: 150%; }
 
   .bg-luxury-gradient {
-    background: radial-gradient(ellipse at 100% 0%,
-      rgba(179,51,75,0.5) 0%, var(--bg-main) 90%);
+    background: radial-gradient(ellipse at 100% 0%, rgba(179,51,75,0.5) 0%, var(--bg-main) 90%);
     min-height: 100dvh;
     width: 100%;
   }
   html.light .bg-luxury-gradient {
-    background: radial-gradient(ellipse at 50% 0%,
-      rgba(179,51,75,0.7) 50%, var(--bg-main) 100%);
+    background: radial-gradient(ellipse at 50% 0%, rgba(179,51,75,0.7) 50%, var(--bg-main) 100%);
   }
 
-.snap-container {
-  scroll-snap-type: y mandatory;
-  overflow-y: scroll;
-  height: 100dvh;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-.snap-container::-webkit-scrollbar {
-  display: none;
-}
+  .snap-container {
+    scroll-snap-type: y mandatory;
+    overflow-y: scroll;
+    height: 100dvh;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .snap-container::-webkit-scrollbar { display: none; }
+
   .snap-section {
     scroll-snap-align: start;
     height: 100dvh;
@@ -351,7 +310,7 @@ html.light {
     -webkit-tap-highlight-color: transparent;
     font-family: inherit;
   }
-  .lux-input:focus { border-bottom-color: var(--input-line-focus); }
+  .lux-input:focus       { border-bottom-color: var(--input-line-focus); }
   .lux-input::placeholder { color: var(--input-placeholder); font-weight: 400; }
 }
 
@@ -396,16 +355,15 @@ html.light {
     100% { transform: translateX(150%)  rotate(25deg); }
   }
 
-  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes spin  { to { transform: rotate(360deg); } }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
 
   body.modal-open [data-top-bar],
-  body.modal-open [data-bottom-nav] {
-    display: none !important;
-  }
+  body.modal-open [data-bottom-nav] { display: none !important; }
 }
 
 /* ═══════════════════════════════
-   REALISTIC METAL BADGES
+   METAL BADGES
 ═══════════════════════════════ */
 .badge-metal {
   position: relative;
@@ -425,58 +383,38 @@ html.light {
     inset 0 0 0 0.06em rgba(255,255,255,0.25),
     0 0.08em 0.25em rgba(0,0,0,0.45);
 }
-
 .badge-metal::before {
   content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    120deg,
-    transparent 25%,
-    rgba(255,255,255,0.6) 50%,
-    transparent 75%
-  );
+  position: absolute; inset: 0;
+  background: linear-gradient(120deg, transparent 25%, rgba(255,255,255,0.6) 50%, transparent 75%);
   transform: translateX(-120%);
   animation: badge-shine 7s ease-in-out infinite;
   pointer-events: none;
 }
-
 .badge-metal::after {
   content: "";
-  position: absolute;
-  inset: 0;
+  position: absolute; inset: 0;
   background-image: radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px);
   background-size: 3px 3px;
   opacity: 0.15;
   mix-blend-mode: overlay;
   pointer-events: none;
 }
-
 @keyframes badge-shine {
   0%   { transform: translateX(-140%); }
   20%  { transform: translateX(140%);  }
   100% { transform: translateX(140%);  }
 }
-
 .badge-engraved {
-  position: relative;
-  z-index: 2;
-  text-shadow:
-    0 0.03em 0 rgba(255,255,255,0.7),
-    0 -0.05em 0.08em rgba(0,0,0,0.8);
+  position: relative; z-index: 2;
+  text-shadow: 0 0.03em 0 rgba(255,255,255,0.7), 0 -0.05em 0.08em rgba(0,0,0,0.8);
 }
 
-.love-coin {
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
-  transition: transform 0.25s ease;
-}
-.love-coin:hover {
-  transform: scale(1.08) rotate(-3deg);
-}
-
-.coin-shine {
-  animation: coinShine 4s linear infinite;
-}
+/* ═══════════════
+   LOVE COIN
+═══════════════ */
+.love-coin { filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4)); transition: transform 0.25s ease; }
+.love-coin:hover { transform: scale(1.08) rotate(-3deg); }
 
 @keyframes coinShine {
   0%   { transform: translateX(-120px); opacity: 0;   }
@@ -486,35 +424,9 @@ html.light {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   NATIVE ANDROID — منع الارتداد عند التمرير
+   RTL + MOBILE
 ═══════════════════════════════════════════════════════════ */
-html, body {
-  overscroll-behavior: none;
-}
-
-/* ═══════════════════════════════════════════════════════════
-   SAFE AREA — شريط الحالة وشريط التنقل الأصلي
-═══════════════════════════════════════════════════════════ */
-
-/* ✅ دعم safe-area على كل الأجهزة */
-:root {
-  --safe-top:    env(safe-area-inset-top,    0px);
-  --safe-bottom: env(safe-area-inset-bottom, 0px);
-  --safe-left:   env(safe-area-inset-left,   0px);
-  --safe-right:  env(safe-area-inset-right,  0px);
-
-  /* header و nav يأخذان الـ safe area بالحسبان */
-  --header-h-safe: calc(var(--header-h) + var(--safe-top));
-  --nav-h-safe:    calc(var(--nav-h)    + var(--safe-bottom));
-}
-
-/* ✅ body يحترم safe area لكن خلفيته تطابق html دائماً */
-body {
-  padding-top:      var(--safe-top);
-  padding-left:     var(--safe-left);
-  padding-right:    var(--safe-right);
-  background-color: var(--bg-main) !important;
-}
+html, body { overscroll-behavior: none; }
 
 .social-icon svg {
   fill: currentColor !important;
@@ -522,11 +434,12 @@ body {
   stroke-width: 0 !important;
 }
 
-/* ══ إضافات الويب ══ */
+/* ══ Scrollbar ══ */
 ::-webkit-scrollbar       { width: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--glass-border); border-radius: 99px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--border-soft); }
 
+/* ══ Page containers ══ */
 .page-container      { max-width: 900px;  margin: 0 auto; padding: clamp(24px,4vw,48px) clamp(16px,4vw,32px); }
 .page-container-wide { max-width: 1200px; margin: 0 auto; padding: clamp(24px,4vw,48px) clamp(16px,4vw,32px); }
