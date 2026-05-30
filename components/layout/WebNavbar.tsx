@@ -97,7 +97,6 @@ export function WebNavbar() {
         background: isDark ? 'rgba(8,0,8,0.90)' : 'rgba(255,255,255,0.92)',
         backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)',
         borderBottom: `1px solid ${bdr}`,
-        overflow: 'hidden',
       }}>
 
         {/* ── زر القائمة — يمين (أول عنصر في RTL) ── */}
@@ -251,19 +250,19 @@ export function WebNavbar() {
           </AnimatePresence>
         </div>
 
-        {/* ── براند — يسار (آخر عنصر في RTL) — scale 65% ── */}
-        <Link
-          href={isMediator ? '/agent' : '/mediators'}
-          style={{ textDecoration: 'none', flexShrink: 0 }}
-        >
-          <div style={{
-            transform: 'scale(0.65)',
-            transformOrigin: 'right center',
-            marginInlineStart: '-18%',
-          }}>
-            <Brand />
-          </div>
-        </Link>
+      {/* ── براند — يسار — scale 65% ── */}
+      <Link
+        href={isMediator ? '/agent' : '/mediators'}
+        style={{ textDecoration: 'none', flexShrink: 0 }}
+      >
+        <div style={{
+          transform: 'scale(0.65)',
+          transformOrigin: 'left center',   // ← تغيير من right إلى left
+          // marginInlineStart محذوف
+        }}>
+          <Brand />
+        </div>
+      </Link>
 
       </nav>
     </>
