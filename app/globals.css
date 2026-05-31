@@ -180,8 +180,6 @@ html.light {
     text-size-adjust: 100%;
     min-height: 100%;
     background-color: var(--bg-main);
-    /* ✅ إصلاح RTL — يمنع انزياح الصفحة أفقياً */
-    overflow-x: clip;
   }
 
   body {
